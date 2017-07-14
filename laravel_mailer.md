@@ -2,6 +2,7 @@ laravel邮件发送
 ==============
 
 ## 1. 配置.env文件
+```
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.126.com
 MAIL_PORT=25
@@ -10,6 +11,7 @@ MAIL_PASSWORD=abc123
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=xudong7930@126.com
 MAIL_FROM_NAME=xudong7930
+```
 
 ## 2.邮件发送
 ```php
