@@ -3,6 +3,7 @@ laravel邮件发送
 
 ## 1. 配置.env文件
 ```
+for 126
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.126.com
 MAIL_PORT=25
@@ -56,5 +57,35 @@ class UserController extends Controller
 ```
 
 
+## 3.创建和发送markdown邮件(独立)
+配置.evn文件的邮件
+```
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=7a00d5d9c110ab
+MAIL_PASSWORD=365493fc398e84
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=xudong7930@mailtrap.io
+MAIL_FROM_NAME=xudong7930
+```
 
+创建邮件控制器和模板
+> php artisan make:email NewUserWelcome --markdown=emails.user.newuserwelcome  
 
+编辑你的邮件内容newuserwelcome.blade.php
+> 暂无  
+
+创建控制器发送邮件
+```php
+    use Mail;
+    use App\Mail\NewUserWelcome;
+
+    public function sendemail()
+    {
+        Mail::to('1046457211@qq.com')->send(new NewUserWelcome());
+    }
+```
+
+测试你的代码
+> 暂无
