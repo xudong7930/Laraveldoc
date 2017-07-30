@@ -1,6 +1,18 @@
 Laravel
 =======
 
+## 8. Laravel5.4执行Migrate报错"Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes"
+编辑AppServiceProvider.php
+```php
+use Illuminate\Support\Facades\Schema;
+
+public function boot()
+{
+    Schema::defaultStringLength(191);
+}
+```
+
+
 ## 7.自定义全局函数
 - 新建app/Helpers/functions.php文件，里面定义函数
 - 在composer.json里面添加
