@@ -6,35 +6,15 @@ laravel queue队列
 > QUEUE_DRIVER=database
 
 ### 2.创建队列表
-> php artisan queue:table  
+> php artisan queue:table 
 > php artisan queue:failed-table   
 > php artisan migrate  
 
 ### 3. 创建相关文件
-UserController.php
-```php
-use Carbon\Carbon;
-
-// 处理上传文件
-public function store(Request $request)
-{
-    $file = $request->file('yourfile')->store('uploads', 'public');
-
-    // 延迟10分钟执行
-    $job = (new DoheavyStuff($file))->delay(Carbon::now()->addMinutes(10));
-        ->onQueue('watermark') // 委派到指定的队列
-        ->onConnections('database') // 委派到指定的连接
-
-    $this->dispatch($job);
-
-    
-    echo 'done';
-}
-```
-
-创建Job任务类
+3-1.创建Job任务类
 > php artisan make:job DoheavyStuff  
 
+3-2.编写job逻辑
 在App/Jobs/DoheavyStuff的文件中:
 ```php
 <?php
@@ -51,6 +31,8 @@ use Intervention\Image\Facades\Image;
 class DoheavyStuff implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout = 120;
 
     public $file;
 
@@ -89,7 +71,30 @@ class DoheavyStuff implements ShouldQueue
 
 ```
 
-### 5.测试
+3-3.使用job在UserController.php中
+```php
+use Carbon\Carbon;
+
+// 处理上传文件
+public function store(Request $request)
+{
+    $file = $request->file('yourfile')->store('uploads', 'public');
+
+    // 延迟10分钟执行
+    $job = (new DoheavyStuff($file))->delay(Carbon::now()->addMinutes(10));
+        ->onQueue('watermark') // 委派到指定的队列
+        ->onConnection('database') // 委派到指定的连接
+
+    $this->dispatch($job);
+
+    
+    echo 'done';
+}
+```
+
+
+
+## 4.测试
 * php artisan queue:work "运行队列的任务"
 * php artisan queue:work redis --queue=sendsms,sendemail --tries=4 "执行redis 发送短信队列的队列, 最多执行4次, sms队列优先email队列"
 * php artisan queue:failed "查看失败的任务"
@@ -100,7 +105,7 @@ class DoheavyStuff implements ShouldQueue
 * php artisan queue:retry all "重新执行所有的失败队列"
 
 
-### 6.使用supervisor以守护进程方式启动队列
+## 5.使用supervisor以守护进程方式启动队列
 Centos:
 > yum -y install supervisor  
 > vim /etc/supervsor.d/laravel_sendsms.conf 添加:  
@@ -118,4 +123,6 @@ stdout_logfile=/home/forge/app.com/worker.log
 ```
 
 ### 启动supervisor
-> supervisorctl reread && supervisorctl update && supervisorctl start  laravel-worker:*  
+> supervisorctl reread  
+> supervisorctl update  
+> supervisorctl start  laravel-worker:*  
