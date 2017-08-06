@@ -1,7 +1,15 @@
 laravel邮件发送
 ==============
 
-## 1. 配置.env文件
+## 1.创建邮件类和模板:
+> php artisan make:mail OrderNew  
+> php artisan make:mail OrderShipped -m emails.order-shipped
+
+## 2.发布邮件模板和样式文件 **可选**
+> php artisan vendor:publish --tag=laravel-mail  
+
+## 3. 配置邮箱账号.env文件
+
 ```
 for 126
 MAIL_DRIVER=smtp
@@ -12,54 +20,8 @@ MAIL_PASSWORD=abc123
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=xudong7930@126.com
 MAIL_FROM_NAME=xudong7930
-```
 
-## 2.邮件发送
-```php
-<?php
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-
-class UserController extends Controller
-{
-    public function userFunction()
-    {
-        // 纯文本邮件
-        Mail::raw('fwfe', function($m) {
-            $m->to('1046457211@qq.com');
-            $m->subject('纯文本邮件');
-        });
-
-        // 使用邮件模板
-        Mail::send('layouts.mail', ['name'=>"xuergou"], function($m){
-            $m->from('xudong7930@126.com', 'your app'); // 邮件发送人
-            $m->to('1046457211@qq.com'); // 收件人
-            $m->cc(['xudong7930@gmail.com']); // 抄送
-            $m->subject('纯文本邮件'); // 主题
-            $m->replyTo('1046457211@qq.com', null); // 回复
-
-            // 添加附件
-            $attachment = storage_path('app/files/test.txt');
-            $m->attach($attachment, ['as'=>'test_293292.txt']);
-            $m->attach($attachment, ['as'=>"=?UTF-8?B?".base64_encode('中文文档')."?=.txt"]);
-
-            // 添加附件2
-            $pdf = '1231231';
-            $m->attachData($pdf, 'invoice.pdf', ['mime' => 'application/pdf']);
-        });
-
-        echo 'done';
-    }
-}
-```
-
-
-## 3.创建和发送markdown邮件(独立)
-配置.evn文件的邮件
-```
+for mailtrap
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.mailtrap.io
 MAIL_PORT=2525
@@ -70,22 +32,136 @@ MAIL_FROM_ADDRESS=xudong7930@mailtrap.io
 MAIL_FROM_NAME=xudong7930
 ```
 
-创建邮件控制器和模板
-> php artisan make:email NewUserWelcome --markdown=emails.user.newuserwelcome  
-
-编辑你的邮件内容newuserwelcome.blade.php
-> 暂无  
-
-创建控制器发送邮件
+## 4.编辑mail类和模板文件
 ```php
-    use Mail;
-    use App\Mail\NewUserWelcome;
+<?php
 
-    public function sendemail()
+namespace App\Mail;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class OrderConfirmed extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $order;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct($order)
     {
-        Mail::to('1046457211@qq.com')->send(new NewUserWelcome());
+        $this->order = $order;
     }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        /*
+        return $this->from('ergou@example.com')
+            ->markdown('emails.order-confirmed')
+            ->with([
+                'order' => $this->order
+            ]);
+        */
+        
+        // 添加多个附件
+        /*
+        return $this->view('emails.order-confirmed-view')
+            ->with(['order'=>$this->order])
+            ->attach('/Users/xudong7930/Public/Xudong/hi.php')
+            ->attach('/Users/xudong7930/Public/Xudong/webpack.md');
+        */  
+
+        /*
+        // 修改了附件
+        return $this->markdown('emails.order-confirmed')
+            ->with(['order' => $this->order])
+            ->attach('/Users/xudong7930/Public/Xudong/webpack.md', [
+                'as' => 'webpack_note.md',
+                'mime' => 'text/x-markdown'
+            ]);
+        */
+        
+        /*
+        // 将内存中的数据保存到文件
+        $data = '12345678';
+        return $this->markdown('emails.order-confirmed')
+            ->with(['order' => $this->order])
+            ->attachData($data, 'order.txt', ['mime'=>'text/plain']);
+        */
+
+        // return $this->text('emails.order-confirmed-view');
+
+        return $this->markdown('emails.order-confirmed')
+            ->with(['order' => $this->order]);
+    }
+}
+
 ```
 
-测试你的代码
+
+## 5.邮件发送
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Mail;
+use App\Mail\OrderConfirmed;
+use Carbon\Carbon;
+
+class MailtestController extends Controller
+{
+    public function send()
+    {
+        // 你的订单
+        $order = new \stdClass;
+        $order->id = 1;
+        $order->name = "your order";
+        $order->total = 12.95;
+
+        /*
+        // 发送邮件        
+        Mail::to('1046457211@qq.com')
+            ->cc('xudong7930@hotmail.com')
+            ->bcc('xudong7930@163.com')
+            ->send(new OrderConfirmed($order));
+        */
+
+        /*
+        // 发送队列邮件
+        Mail::to('xudong7930@gmail.com')
+            ->queue(new OrderConfirmed($order));
+        */
+
+        /*
+        // 延迟发送
+        $when = Carbon::now()->addMinutes(2);
+        Mail::to('xudong7930@hotmail.com')
+            ->later($when, new OrderConfirmed($order));
+        */
+
+        // 指定发送队列
+        $orderConfirmedMail = (new OrderConfirmed)->onQueue('emails');
+        Mail::to('xudong7930@126.com')
+            ->queue($orderConfirmedMail);
+
+        dump('done');
+    }
+}
+
+```
+
+## 6.测试你的代码
 > 暂无
