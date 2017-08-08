@@ -5,21 +5,22 @@ Laravel私有包开发
 > composer require jeroen-g/laravel-packager
 
 ## 2.在config/app.php添加
+```php
 JeroenG\Packager\PackagerServiceProvider::class,
+```
 
 ## 3.创建一个新的包
 创建修改.evn文件，添加**CURL_VERIFY=false**
-> php artisan packager:new xudong7930 MyPackageName
+> php artisan packager:new xudong7930 MyPackageName  
 
 列出本地的包
-> php artisan packager:list
+> php artisan packager:list  
 
 移除指定包
 > php artisan packager:remove xudong7930 MyPackageName
 
 ## 4.在app/packages下开发你的包
-> 文件目录的部署参考vendor/作者/包
-
+> 文件目录的部署参考vendor/作者/包  
 > 具体实例参考 [Laravel私有包开发](https://github.com/xudong7930/productsadmin)
 
 
@@ -55,14 +56,12 @@ git push origin v0.1.1  //在远程上创建版本
 ```
 
 更新安装
-> composer update -v
-
-> composer udpate xudong7930 MyAnotherPackage -v
+> composer update -v  
+> composer udpate xudong7930 MyAnotherPackage -v  
 
 注册config/app.php文件中service provider
 > xudong7930\MyAnotherPackage\MyAnotherPackageServiceProvider::class,
 
 发布包
-> php artisan vendor:publish
-
-> php artisna vendor:publish --provider="xudong7930\Alidayu\AlidayuServiceProvider"
+> php artisan vendor:publish  
+> php artisna vendor:publish --provider="xudong7930\Alidayu\AlidayuServiceProvider"  
