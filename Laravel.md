@@ -170,8 +170,10 @@ public function boot()
 
 > php artisan db:seed
 
-> php artisan tinker
-> factory('App\Models\Flights', 14)->create();
+使用tingker
+> php artisan tinker  
+> factory('App\Models\Flights', 14)->create();  
+
 
 
 
