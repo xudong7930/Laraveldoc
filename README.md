@@ -14,13 +14,13 @@ how to use laravel package easily
 - [Laravel_Request&Response](https://github.com/xudong7930/Laraveldoc/laravel.md)
 - [Laravel_邮件](https://github.com/xudong7930/Laraveldoc/laravel.md)
 - [Laravel_中间件](https://github.com/xudong7930/Laraveldoc/laravel.md)
-- [Laravel_Notification](https://github.com/xudong7930/Laraveldoc/laravel.md)
+- [Laravel_Notification](https://github.com/xudong7930/Laraveldoc/laravel.md)
 - [Laravel_队列](https://github.com/xudong7930/Laraveldoc/laravel.md)
-- [Laravel_加密](https://github.com/xudong7930/Laraveldoc/laravel.md)
+- [Laravel_加密](https://github.com/xudong7930/Laraveldoc/laravel.md)
 
 ## Third Package
 - [Laravel_debugbar](https://github.com/xudong7930/Laraveldoc/laravel.md)
 - [Laravel_IDEHelper](https://github.com/xudong7930/Laraveldoc/laravel.md)
 - [Laravel_Passport](https://github.com/xudong7930/Laraveldoc/laravel.md)
-- [Laravel_Socialite](https://github.com/xudong7930/Laraveldoc/laravel.mdx)
+- [Laravel_Socialite](https://github.com/xudong7930/Laraveldoc/laravel.mdx)
 - [Laravel_图片处理](https://github.com/xudong7930/Laraveldoc/laravel.md)
