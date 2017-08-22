@@ -45,12 +45,12 @@ git push origin v0.1.1  //在远程上创建版本
 在composer.json中添加
 ```json
 "requrie": {
-	'xudong7930/MyAnotherPackage': '0.1.*'
+    'xudong7930/MyAnotherPackage': '0.1.*'
 },
 "repositories": [
     {
-    	"type": "git",
-    	"url": "git@github.com:xudong7930/MyAnotherPackage.git"
+        "type": "git",
+        "url": "git@github.com:xudong7930/MyAnotherPackage.git"
     }
 ]
 ```

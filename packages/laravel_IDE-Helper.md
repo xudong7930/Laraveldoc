@@ -2,18 +2,21 @@ laravel-ide-helper
 ==================
 
 ## 1.安装
-> composer require barryvdh/laravel-ide-helper
-> composer require --dev barryvdh/laravel-ide-helper
+> composer require barryvdh/laravel-ide-helper --dev
 
-## 2.在config/app.php注册service provider
-> Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+## 2.注册服务app.php
+```php
+'providers' => [
+    Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+]
+```
 
-## 3.重新生成php-docs
+## 3.手动生成php-docs
 > php artisan clear-compiled && php artisan ide-helper:generate
 
-## 4.加入composer.json
+## 4.自动生成php-docs, 加入composer.json
 ```json
-"scripts":{
+"scripts": {
     "post-update-cmd": [
         "Illuminate\\Foundation\\ComposerScripts::postUpdate",
         "php artisan clear-compiled",
@@ -28,5 +31,5 @@ laravel-ide-helper
 > php artisan vendor:publish --provider="Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider" --tag=config
 
 ## 6.生成一个.phpstorm.meta.php文件来添加工厂设计模式支持
-> php artisan ide-helper:meta  
+> php artisan ide-helper:meta   
 > 重启PHPStorm确保.phpstorm.meta.php文件被索引  

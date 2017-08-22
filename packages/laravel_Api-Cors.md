@@ -1,13 +1,11 @@
-Laravel的API跨域问题
-===================
+Laravel Api Cors
+================
 
-##创建中间件Cors
+## 创建middleware
+> php artisan make:middleware Cors
 
-	php artisan make:middleware Cors
-
-
-##编辑Cors.php文件
-
+## 配置中间件
+```php
     public function handle($request, Closure $next)
     {
         $response = $next($request);
@@ -31,10 +29,12 @@ Laravel的API跨域问题
 
         return $response;
     }
+```
 
-## 注册中间件，编辑app/Http/Kernel.php
-	protected $middleware = [
-	    \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
 
-	    \App\Http\Middleware\Cors::class,
-	];
+## 在app/Http/Kernel.php中添加
+```php
+protected $middleware = [
+    \App\Http\Middleware\Cors::class,
+]
+```
