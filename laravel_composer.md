@@ -5,7 +5,7 @@ PHP Composer
 > wget https://getcomposer.org/download/1.4.1/composer.phar && chmod +x composer.phar && mv composer.phar /usr/local/bin/composer
 
 ## 设置使用CN镜像站
-> composer config -g repo.packagist composer https://packagist.phpcomposer.com
+> composer config -g repo.packagist composer https://packagist.phpcomposer.com  
 
 ## 常用命令
 * composer self-update

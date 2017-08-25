@@ -23,12 +23,11 @@ JeroenG\Packager\PackagerServiceProvider::class,
 > 文件目录的部署参考vendor/作者/包  
 > 具体实例参考 [Laravel私有包开发](https://github.com/xudong7930/productsadmin)
 
-
 ## 5.发布推送到Github
 ``` bash
 cd app/packages/xudong7930/MyAnotherPackage
 git init
-git add *
+git add --all
 git remote add origin git@github.com:xudong7930/MyAnotherPackage.git
 git commmit -m "initial commit"
 git push -u origin master
