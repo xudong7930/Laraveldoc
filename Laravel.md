@@ -1,6 +1,29 @@
 Laravel
 =======
 
+## 9. Laraevl5.4使用whoops错误输出
+step1: 安装whoops包
+* composer require filp/whoops
+
+step2: app/Exceptions/Handler.php
+```php
+protected function convertExceptionToResponse(Exception $e)
+{
+    if (config('app.debug')) {
+        $whoops = new \Whoops\Run;
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+
+        return response()->make(
+                $whoops->handleException($e),
+                method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500,
+                method_exists($e, 'getHeaders') ? $e->getHeaders() : []
+            );
+    }
+
+    return parent::convertExceptionToResponse($e);
+}
+```
+
 ## 8. Laravel5.4执行Migrate报错"Syntax error or access violation: 1071 Specified key was too long; max key length is 767 bytes"
 编辑AppServiceProvider.php
 ```php
