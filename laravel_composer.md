@@ -28,3 +28,21 @@ PHP Composer
 * composer dump-autoload --optimize 优化
 * composer create-project --prefer-dist --no-progress "laravel/laravel" ~/Desktop/project-name 创建项目
 * composer init 创建composer.json文件
+
+
+## php-cs-fixer
+安装
+* composer global require friendsofphp/php-cs-fixer
+
+使用
+* php-cs-fixer fix AppServiceProvider.php --rules=@PSR2
+
+sublime使用
+1. Packages/User/Builds/PSR-2.sublime-build
+2. 文件内容:
+```json
+{
+    "shell_cmd": "php-cs-fixer fix $file --rules=@PSR2"
+}
+```
+3. 在PersonController.php文件中,运行super+b
