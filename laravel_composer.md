@@ -28,7 +28,7 @@ PHP Composer
 * composer dump-autoload --optimize 优化
 * composer create-project --prefer-dist --no-progress "laravel/laravel" ~/Desktop/project-name 创建项目
 * composer init 创建composer.json文件
-
+* composer create-project --prefer-dist "laravel/laravel=5.4.*" ~/Desktop/project-name 安装指定的版本
 
 ## php-cs-fixer
 安装

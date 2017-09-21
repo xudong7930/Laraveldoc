@@ -193,13 +193,25 @@ public function boot()
 
 > php artisan db:seed
 
+
+
 使用tingker
 > php artisan tinker  
 > factory('App\Models\Flights', 14)->create();  
 
 
+使用DB
+> DB::table('cards')->insert(['title'=>'My New Card', 'created_at'=>new DateTime, 'updated_at'=>new DateTime]);
+> DB::table('cards')->get();
+> DB::table('cards')->where('title', 'My New Card')->first();
+> DB::table('cards')->where('title', 'My New Card')->delete();
+> DB::listen(function($query){ var_dump($query->sql); });
 
 
+使用Model
+> \App\Card::all();
 
-
-
+$note = new \App\Note;
+$note->body='some note fot the card';
+$note->card_id=1
+$note->save();
