@@ -2,10 +2,15 @@ Laravel Passport
 ================
 
 ## 1. 安装
+larale5.3:
+> composer require laravel/passport=~1.0
+
+laravel5.4
 > composer require laravel/passport
 
+
 ## 2.注册服务
-在**config/app.php**中的**providers**添加:
+文件app.php:
 > Laravel\Passport\PassportServiceProvider::class,  
 
 添加数据库表
@@ -82,26 +87,24 @@ class User extends Authenticatable
 }
 ```
 
-## 4. 往AuthServiceProvider中boot方法添加:
+## 4. 注册passport路由
+AuthServiceProvider.php
 ```php
 public function boot()
 {
     $this->registerPolicies();
     Passport::routes();
+    
     // 令牌有效期
     Passport::tokensExpireIn(Carbon::now()->addDays(15));
     Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
 }
 ```
 
-## 5. 修改conifg/auth.php中修改guards中的api的driver为passport
+## 5. 设置API的驱动为Passport
+auth.php
 ```php
 'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
-    ],
-
     'api' => [
         'driver' => 'passport',
         'provider' => 'users',

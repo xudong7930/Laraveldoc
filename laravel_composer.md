@@ -33,6 +33,8 @@ PHP Composer
 ## php-cs-fixer
 安装
 * composer global require friendsofphp/php-cs-fixer
+* composer require way/generators --dev "安装到require-dev中"
+
 
 使用
 * php-cs-fixer fix AppServiceProvider.php --rules=@PSR2
