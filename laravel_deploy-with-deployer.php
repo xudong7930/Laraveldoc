@@ -54,6 +54,7 @@ localhost()
     ->become('xudong930')
     ->set('deploy_path', '/Users/xudong7930/Desktop/{{application}}');    
 
+// https://github.com/deployphp/deployer
 // run: deployer deploy test|develop|product
 
 /*
