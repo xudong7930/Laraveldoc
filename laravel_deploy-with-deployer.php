@@ -4,7 +4,6 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 
-
 /*
 |--------------------------------------------------------------------------
 | Property setting
