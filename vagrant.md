@@ -84,7 +84,6 @@ vagrant reload "重启虚拟机,并使用新的配置文件"
 vagrant port "查看端口映射情况"
 
 
-
 9.更新vagrant box
 git pull homestead.git
 vagrant box update
