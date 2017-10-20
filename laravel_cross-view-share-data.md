@@ -1,7 +1,7 @@
 laravel views
 =============
 
-## 往view传递数据
+## 往view传递数据
 ```php
 return view('page.profile')->with([
     'ok'=>'your ok data'
@@ -26,7 +26,7 @@ public function boot()
 }
 ```
 
-## 创建自定义的跨view数据共享
+## 创建自定义的跨view数据共享
 
 创建文件:
 > php artisan make:provider ComposerServiceProvider  

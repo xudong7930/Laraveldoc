@@ -54,7 +54,7 @@ laravel event&listener
 ```
 
 2-2.生成相关的Listener
-> php artisan event:generate  //生成event 和 listener  文件
+> php artisan event:generate  //生成event 和 listener  文件
 > php artisan make:event NewUserRegister  // 生成event文件
 > php arisan make:listener SendUserActivationMail // 生成listener文件
 

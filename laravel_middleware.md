@@ -2,10 +2,10 @@ Laravel Middleware
 ==================
 
 
-middleware针对HTTP请求进行处理
+middleware针对HTTP请求进行处理
 
 ## 
-1.创建中间件
+1.创建中间件
 > php artisan make:middleware Admin
 
 2.在kernel.php中注册中间件

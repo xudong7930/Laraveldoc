@@ -23,7 +23,7 @@ $.ajaxSetup({
 
 
 ## 排除无需验证的路由
-VerifyCsrfToken.php文件中:
+VerifyCsrfToken.php文件中:
 ```php
     protected $except = [
         'stripe/*'
