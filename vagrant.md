@@ -11,6 +11,7 @@ Vagrant-laravel devement env
 
 3.下载vagrant.box
 > wget https://vagrantcloud.com/laravel/boxes/homestead/versions/3.1.0/providers/virtualbox.box
+> wget https://vagrantcloud.com/laravel/boxes/homestead/versions/4.0.0/providers/virtualbox.box
 
 4.添加虚拟机
 ```json
@@ -25,50 +26,42 @@ Vagrant-laravel devement env
     }]
 }
 ```
+vagrant box list "列出所有虚拟机"
 vagrant box add metadata.json "新增虚拟机"
 vagrant box remove xudong/homestead "移除虚拟机"
 
 
 5.下载homestead项目
 git clone https://github.com/laravel/homestead.git Homestead && cd Homestead
+composer require laravel/homestead
 
 6.初始化生成homestead.yaml文件
+vendor/bin/homestead make
 bash init.sh
+
 
 7.配置hometead.yaml
 ```json
----
-box: xudong/homestead
-ip: "192.168.10.10"
-memory: 768
+ip: 172.16.10.10
+memory: 1024
 cpus: 1
 provider: virtualbox
-
-authorize: ~/Public/ssh2/id_rsa.pub
-
+authorize: ~/.ssh2/id_rsa.pub
 keys:
-    - ~/.ssh/id_rsa
-
+    - ~/.ssh2/id_rsa
 folders:
-    - map: ~/Public/Xudong/laravel-55
-      to: /home/vagrant/code
-      type: "rsync"
-      options:
-          rsync_args: ["--verbose", "--archive", "--delete", "-zz"]
-          rsync_exclude: ["node_modules", "vendor"]
-
+    -
+        map: /Users/xudong7930/Public/Xudong/incremental_api
+        to: /home/vagrant/code
 sites:
-    - map: laravel.app
-      to: /home/vagrant/code/public
-      schedule: false
-
+    -
+        map: incremental-api.io
+        to: /home/vagrant/code/public
 databases:
     - homestead
-
-ports:
-    - send: 7777
-      to: 777
-      protocol: udp
+name: incremental-api.io
+box: xudong/incremental-api
+hostname: incremental-api.io
 ```
 
 8.启动vagrant虚拟机(cd Homestead)
@@ -82,7 +75,6 @@ vagrant suspend "挂起"
 vagrant resume "恢复挂起"
 vagrant reload "重启虚拟机,并使用新的配置文件"
 vagrant port "查看端口映射情况"
-
 
 9.更新vagrant box
 git pull homestead.git
