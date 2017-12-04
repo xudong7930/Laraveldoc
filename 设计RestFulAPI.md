@@ -33,18 +33,21 @@
 ## 4.状态码 ##
 服务器向用户返回的常见状态码和提示信息
 
-	200 OK - [GET]：服务器成功返回用户请求的数据，该操作是幂等的（Idempotent）。
-	201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功。
-	202 Accepted - [*]：表示一个请求已经进入后台排队（异步任务）
-	204 NO CONTENT - [DELETE]：用户删除数据成功。
-	400 INVALID REQUEST - [POST/PUT/PATCH]：用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。
-	401 Unauthorized - [*]：表示用户没有权限（令牌、用户名、密码错误）。
-	403 Forbidden - [*] 表示用户得到授权（与401错误相对），但是访问是被禁止的。
-	404 NOT FOUND - [*]：用户发出的请求针对的是不存在的记录，服务器没有进行操作，该操作是幂等的。
-	406 Not Acceptable - [GET]：用户请求的格式不可得（比如用户请求JSON格式，但是只有XML格式）。
-	410 Gone -[GET]：用户请求的资源被永久删除，且不会再得到的。
-	422 Unprocesable entity - [POST/PUT/PATCH] 当创建一个对象时，发生一个验证错误。
-	500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功。
+	200: OK -> The standard success code and default option.
+	201: Object Created -> Useful for the store|update actions.
+	202: Accepted -> 表示一个请求已经进入后台排队（异步任务）
+	204: No Content -> When an action was executed successfully, but there is no content to return. Useful for delete actions.
+	206: Partial Content -> Useful when you have to return a paginated list of resource.
+	400: Invalid Request -> [POST/PUT/PATCH]用户发出的请求有错误，服务器没有进行新建或修改数据的操作.
+	401: Unauthorized -> The user needs to be authenticated.
+	403: Forbidden -> The user has been authenticated, but does not have the permissions to perform an action.
+	404: Not Found -> The resource is not found.
+	406: Not Acceptable -> 用户请求的格式不可得（比如用户请求JSON格式，但是只有XML格式）。
+	410: Gone  -> 用户请求的资源被永久删除，且不会再得到的。
+	422: Unprocesable entity -> [POST/PUT/PATCH] 当创建一个对象时，发生一个验证错误。
+	500: INTERNAL SERVER ERROR.
+	503: Service Unavailable.
+
 
 ## 5.错误处理 ##
 如果状态码是4xx，就应该向用户返回出错信息

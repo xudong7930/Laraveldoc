@@ -116,8 +116,63 @@ auth.php
 > php artisan passport:keys
 
 # 颁发访问令牌
-## 方式1: 通过artisan命令
+## credential授权类型
 > php artisan passport:client
+> php artisan passport:client --personal --name=xuergou
 
-## 方式2: 通过JSON API
+取得access token:
+POST http://domain.com/oauth/token
+grant_type: client_credentials
+client_id: 3
+client_secret: g1SDZzsSVFlgl7TIKz8Zpeehy1bvQzeXh1YDek6V
+
+使用access token取得数据
+http://domain.com/api/products
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhb...
+
+## password授权类型
+* 生成访问令牌
+> php artisan passport:client --password
+
+* 取得access token
+POST http://domain.com/oauth/token
+grant_type: password
+client_id: 4
+client_secret: EIbmxEMjMBneR6XFZrUG2tmlQ8I4RxOMFVEsouOS
+
+* 使用access token取得数据
+http://domain.com/api/products
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhb...
+
+
+* 刷新access token
+POST http://domain.com/oauth/token
+grant_type: refresh_token
+client_id: 4
+client_secret: EIbmxEMjMBneR6XFZrUG2tmlQ8I4RxOMFVEsouOS
+refresh_token: eyJ0eXAiOiJKV1QiLCJhb...
+
+
+## web request 授权类型
+GET http://localhost:8000/oauth/authorize?client_id=4&redirect_uri=http://localhost&response_type=token
+**redirect_uri要跟数据库保持一致**
+
+
+## code 授权类型(OAuth2)
+* GET http://localhost:8000/oauth/authorize?client_id=3&redirect_uri=http://localhost/auth/callback&response_type=code
+**client_id需要关联用户ID,redirect_uri要跟数据库保持一致**
+
+> http://localhost/auth/callback?code=def50200dff157d5b95840f9c106c9dc5c96a4437815c913d52b320c82983829a6a04aa31926265ad6f42816773fa2604b5790ce91d3f8db65b8d98ae7ef31a9f86b45a25283a6ef603dd1852a2071a5a624ce49b108cda5f03594caf5c0f7623450e7dc2d6081553e383685c7428f9b24611ecbfdf57563758ebcd2e16d704bdcdfa6aeca83613e2b7328e6670f9297da48fa553e2626fbbb0ccbcca7d55674330342331ab14829436f162c93f469316fba4787f48e09441b3a851b8fd020b6664e4be3e58d05db9b99277635ced2f9ab58deaacf38af3deb2bae77c799606bbe6553525153251e5f085d68d932b5c8362da2054eebda8da9273ba73eeec0d983b5ba8a95194c53479b27c7db681bf2c8f414ce4c3407faae621aeff39a7accdb59a1a35a5cdc2d13b48ec45653fc6de02d953157be9cca2758b7d17184e790e953bc2100991996a7d958807480af848cb7172f02b114cd1b57da4954794d8f07ba
+
+
+* POST http://localhost:8000/oauth/token
+client_id: 3
+client_secret: g1SDZzsSVFlgl7TIKz8Zpeehy1bvQzeXh1YDek6V
+redirect_uri: http://localhost
+code: def50200dff157d5b95840f9c106c9dc5c96a4437815c913d52b320c82983829a6a04aa31926265ad6f42816773fa2604b5790ce91d3f8db65b8d98ae7ef31a9f86b45a25283a6ef603dd1852a2071a5a624ce49b108cda5f03594caf5c0f7623450e7dc2d6081553e383685c7428f9b24611ecbfdf57563758ebcd2e16d704bdcdfa6aeca83613e2b7328e6670f9297da48fa553e2626fbbb0ccbcca7d55674330342331ab14829436f162c93f469316fba4787f48e09441b3a851b8fd020b6664e4be3e58d05db9b99277635ced2f9ab58deaacf38af3deb2bae77c799606bbe6553525153251e5f085d68d932b5c8362da2054eebda8da9273ba73eeec0d983b5ba8a95194c53479b27c7db681bf2c8f414ce4c3407faae621aeff39a7accdb59a1a35a5cdc2d13b48ec45653fc6de02d953157be9cca2758b7d17184e790e953bc2100991996a7d958807480af848cb7172f02b114cd1b57da4954794d8f07ba
+grant_type: authorization_code
+**redirect_uri要跟数据库保持一致**
+
+
+
 

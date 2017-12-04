@@ -80,4 +80,9 @@ vagrant port "查看端口映射情况"
 git pull homestead.git
 vagrant box update
 
+10.提示
+mysql默认账号: host/port/user/password = yourdomain/3306/homestead/secret
+redis默认账号:
+
+
 
