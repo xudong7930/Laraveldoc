@@ -42,6 +42,9 @@ bash init.sh
 
 7.配置hometead.yaml
 ```json
+---
+box: xudong/homestead
+version: 0.4.0
 ip: 172.16.10.10
 memory: 1024
 cpus: 1
