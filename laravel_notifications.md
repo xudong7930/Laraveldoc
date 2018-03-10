@@ -131,7 +131,26 @@ class User extends Authenticatable
 > 暂无
 
 ### Slack
-> 暂无
+1. App\Notifications\Lessonpublichs.php
+```php
+public function via()
+{
+    return ['slack'];
+}
+
+public function toSlack()
+{
+    return (new SlackMessage)->content('some slack content message');
+}
+```
+
+2. App\User.php
+```php
+public function routeNotificationForSlack()
+{
+    return "https://hooks.slack.com/services/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";
+}
+```
 
 
 ### 自定义Notify
