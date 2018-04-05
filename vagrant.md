@@ -1,73 +1,75 @@
-Vagrant-laravel devement env
-============================
+vagrant
+=======
 
+## 1. 安装virtualbox, vagrant
+[下载vagrant](https://www.vagrantup.com/)
+[下载virtualbox](https://www.virtualbox.org/wiki/Downloads)
 
-# 安装
-1.下载vagrant
-> https://www.vagrantup.com/
+# 2. 下载, 添加vagrant.box
+下载: 
+* https://app.vagrantup.com/laravel/boxes/homestead
+* wget https://vagrantcloud.com/laravel/boxes/homestead/versions/5.2.0/providers/virtualbox.box
 
-2.下载virtualbox
-> https://www.virtualbox.org/wiki/Downloads
+添加虚拟机
+* 列出所有虚拟机: vagrant box list
+* 添加虚拟机: vagrant box add box_metadata.json
+* 移除虚拟机: vagrant box remove "laravel_homestead_v520"
 
-3.下载vagrant.box
-> wget https://vagrantcloud.com/laravel/boxes/homestead/versions/3.1.0/providers/virtualbox.box
-> wget https://vagrantcloud.com/laravel/boxes/homestead/versions/4.0.0/providers/virtualbox.box
-
-4.添加虚拟机
 ```json
 {
-    "name": "xudong/homestead",
+    "name": "homestead_v520",
     "versions": [{
-        "version": "0.4.0",
+        "version": "5.2.0",
         "providers": [{
             "name": "virtualbox",
-            "url": "file:////Users/xudong7930/.vagrant.d/tmp/virtualbox.box"
+            "url": "file:///Users/xudong7930/.vagrant.d/tmp/virtualbox_520.box"
         }]
     }]
 }
 ```
-vagrant box list "列出所有虚拟机"
-vagrant box add metadata.json "新增虚拟机"
-vagrant box remove xudong/homestead "移除虚拟机"
 
 
-5.下载homestead项目
-git clone https://github.com/laravel/homestead.git Homestead && cd Homestead
-composer require laravel/homestead
-
-6.初始化生成homestead.yaml文件
-vendor/bin/homestead make
+## 4. 下载homestead项目
+如果后期污染了这个项目,重新下载homestead操作即可
+```
+git clone --branch v7.3.0 https://github.com/laravel/homestead.git
+cd homestead
 bash init.sh
-
-
-7.配置hometead.yaml
-```json
----
-box: xudong/homestead
-version: 0.4.0
-ip: 172.16.10.10
-memory: 1024
-cpus: 1
-provider: virtualbox
-authorize: ~/.ssh2/id_rsa.pub
-keys:
-    - ~/.ssh2/id_rsa
-folders:
-    -
-        map: /Users/xudong7930/Public/Xudong/incremental_api
-        to: /home/vagrant/code
-sites:
-    -
-        map: incremental-api.io
-        to: /home/vagrant/code/public
-databases:
-    - homestead
-name: incremental-api.io
-box: xudong/incremental-api
-hostname: incremental-api.io
 ```
 
-8.启动vagrant虚拟机(cd Homestead)
+* 配置homestead.yaml
+* 启动和安装: vagrant up
+
+```yaml
+---
+box: "homestead_v520"
+version: "5.2.0"
+name: "devserver"
+hostname: "devserver"
+ip: "192.168.10.10"
+memory: 2048
+cpus: 1
+provider: virtualbox
+
+authorize: ~/.ssh/id_rsa.pub
+
+keys:
+    - ~/.ssh/id_rsa
+
+folders:
+    - map: ~/Public/xudong/code
+      to: /home/vagrant/code
+
+sites:
+    - map: homestead.io
+      to: /home/vagrant/code
+
+databases:
+    - homestead
+```
+
+8. 启动vagrant虚拟机(cd Homestead)
+```
 vagrant up '启动'
 vagrant halt '关闭'
 vagrant destroy --force '删除虚拟机'
@@ -78,14 +80,13 @@ vagrant suspend "挂起"
 vagrant resume "恢复挂起"
 vagrant reload "重启虚拟机,并使用新的配置文件"
 vagrant port "查看端口映射情况"
+```
 
-9.更新vagrant box
-git pull homestead.git
-vagrant box update
+9. 更新vagrant box
+* git pull homestead.git
+* vagrant box update
 
-10.提示
+10. 提示
 mysql默认账号: host/port/user/password = yourdomain/3306/homestead/secret
 redis默认账号:
-
-
-
+root账号: 

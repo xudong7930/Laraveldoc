@@ -1,6 +1,10 @@
 设计RESTful API
 ===============
 
+* REST全称是Representational State Transfer(表述性状态转移)
+* 一个资源对应一个特定的URI
+
+
 ## 1.基本原则 ##
 > - API与用户的通信协议总是使用**https**协议
 > - API复杂:**https://api.example.com**
