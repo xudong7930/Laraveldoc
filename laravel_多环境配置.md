@@ -14,7 +14,7 @@ Laravel多环境
 ## step3: 配置.env
 * 清空.env文件,并设置"local|test|product"单个环境
 
-## step4: 在bootstrap/下创建environment.php
+## step4: 在bootstrap/下创建env.php
 ```php
 <?php
 
@@ -45,6 +45,8 @@ $env = $app->detectEnvironment(function(){
 ```
 
 ## step5: 在bootstrap/app.php中加载刚才创建的环境文件
+放在$app变量的后边
+
 ```php
 <?php
 
@@ -56,7 +58,7 @@ $env = $app->detectEnvironment(function(){
 | This will determine, which environment will be loaded for our application.
 |
 */
-require __DIR__.'/environment.php';
+require __DIR__.'/env.php';
 
 ?>
 ```
