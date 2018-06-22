@@ -1,138 +1,150 @@
-<?php
+deployer
+========
 
+## 本地_安装deployer
+> composer global require deployer/deployer -vvv  
+> curl -LO https://deployer.org/deployer.phar && mv deployer.phar /usr/local/bin/dep && chmod +x /usr/local/bin/dep
+
+## 本地_免密码登录deployer
+```bash
+ssh-keygen -t rsa -b 4096 -f  ~/.ssh/deployerkey
+ssh-copy-id -i ~/.ssh/deployerkey.pub -p 30011 deployer@45.32.77.118
+ssh deployer@45.32.77.118 -i ~/.ssh/deployerkey
+```
+
+## 服务器_配置
+```bash
+# 确保php在常规路径下:
+ln -s /usr/local/php/bin/php /usr/local/bin/
+
+# 添加用户deployer
+adduser deployer
+
+# 设置umask权限
+su - deployer && echo "umask 022" >> ~/.bashrc && exit
+
+# 将deployer用户加入sudoers中
+echo "deployer ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
+
+# 让deployer跟nginx用户www-data有相同的权限
+usermod -aG www-data deployer
+
+# 授权web目录
+chown deployer:www-data /var/www/html
+chmod g+s /var/www/html
+```
+
+## 服务器_配置Git访问
+```bash
+su - deployer
+ssh-keygen -t rsa -b 4096 -C "deployer"
+cat ~/.ssh/id_rsa.pub #粘贴到github的项目上
+ssh -T git@github.com
+```
+
+## 本地_开始部署Laravel
+```bash
+cd /www/demo-project
+rm -fr deployer.php && dep init -t Laravel
+dep deploy -vvv
+dep deploy product -vvv
+dep deploy local -vvv
+```
+
+deployer.php
+```php
+<?php
 namespace Deployer;
 
 require 'recipe/laravel.php';
+set_time_limit(0);
 
-/*
-|--------------------------------------------------------------------------
-| Property setting
-|--------------------------------------------------------------------------
-|
-| This value is the name of your application. This value is used when the
-| framework needs to place the application's name in a notification or
-| any other location as required by the application or its packages.
-*/
-set('application', 'my_project');
-set('repository', 'https://github.com/xudong7930/whats-new-in-laravel54.git');
-set('keep_releases', 5);
-set('branch', 'master');
-set('ssh_multiplexing', true);
-set('http_user', 'www-data');
-set('writable_mode', 'chmod');
-
-
-// [Optional] Allocate tty for git clone. Default value is false.
+set('application', 'newblog');
+set('repository', 'git@github.com:xudong7930/newblog.git');
 set('git_tty', true); 
+set('keep_releases', 5);
+set('writable_use_sudo', true);
+set('cleanup_use_sudo', true);
 
-// Shared files/dirs between deploys 
+// 分享文件即目录，通常也不用改，默认包含了 storage 目录
 add('shared_files', []);
 add('shared_dirs', []);
-add('writable_dirs', ['storage', 'bootstrap/cache']);
+add('writable_dirs', []);
 
-
-/*
-|--------------------------------------------------------------------------
-| Hosts setting
-|--------------------------------------------------------------------------
-|
-| This value is the name of your application. This value is used when the
-| framework needs to place the application's name in a notification or
-| any other location as required by the application or its packages.
-*/
+// Hosts
+// 生产用的主机
 host('45.32.77.118')
-    ->stage('product')
-    ->port('22')
-    ->user('www-data')
-    ->identityFile('~/Public/ssh2/id_rsa')
+	->stage('product')
+	->user('deployer')
+	->port('30011')
+	->set('branch', 'master') // 最新的主分支部署到生产机
+    ->set('deploy_path', '/usr/local/html/{{application}}')
+    ->set('http_user', 'www-data') // 这个与 nginx 里的配置一致  
+    ->identityFile('~/.ssh/id_rsa')
+    ->forwardAgent(true)
+    ->multiplexing(true)
     ->addSshOption('UserKnownHostsFile', '/dev/null')
-    ->addSshOption('StrictHostKeyChecking', 'no')
-    ->set('deploy_path', '/usr/local/www/{{application}}');    
+    ->addSshOption('StrictHostKeyChecking', 'no');
 
-localhost()
-    ->stage('develop')
-    ->become('xudong930')
-    ->set('deploy_path', '/Users/xudong7930/Desktop/{{application}}');    
-
-// https://github.com/deployphp/deployer
-// run: deployer deploy test|develop|product
-
-/*
-|--------------------------------------------------------------------------
-| Tasks setting
-|--------------------------------------------------------------------------
-|
-| This value is the name of your application. This value is used when the
-| framework needs to place the application's name in a notification or
-| any other location as required by the application or its packages.
-*/
-
-// 复制环境文件
-task('fix:env', function () {
-    $cmd = <<<EOF
-touch {{release_path}}/database/database.sqlite
-cat {{release_path}}/.env.product > {{release_path}}/../../shared/.env
-EOF;
-    run($cmd);
+// Tasks
+// 任务：重置 opcache 缓存
+task('reset_opcache', function() {
+	run("pwd");
+	// run('{{bin/php}} -r \'opcache_reset();\'');
 });
 
-// 修复laravel权限
-task('fix:permit', function () {
-    
-    within('{{release_path}}', function () {
-        run("php artisan key:generate;"); 
-    });
-    
-    run("rm -fr {{release_path}}/bootstrap/cache/*");
-    run("chmod -R 777 {{release_path}}/bootstrap/cache");
-    run("chmod -R 777 {{release_path}}/../../shared/storage");
-
-    writeln('fix permit done');
+// 任务：重启 php-fpm 服务
+task('restart_phpfpm', function () {
+    run('sudo /etc/init.d/php-fpm restart');
 });
 
-task('after:failed', function () {
-    // run('deployer rollback'); 
-    // run('deployer deploy:unlock');
+// 任务：supervisor reload
+task('reload_supervisor', function () {
+    run('sudo supervisorctl reload');
 });
 
+// 任务: 发送部署成功提醒
+task('send_message', function () {
+    run("pwd");
+});
 
-task('after:success', [
-    'fix:permit'
-]);
+task('set_env', function () {
+	within('{{release_path}}', function () {
+		run("echo product > .env");
+	});
+});
 
+task('clear_cache', function() {
+	within('{{release_path}}', function () {
+		run("php artisan view:clear");
+		run("php artisan route:clear");
+		run("php artisan cache:clear");
+		run("php artisan config:clear");
+		run("php artisan view:clear");
+		run("php artisan clear-compiled");
+	});
+});
 
-/*
-|--------------------------------------------------------------------------
-| Hooks setting
-|--------------------------------------------------------------------------
-|
-| This value is the name of your application. This value is used when the
-| framework needs to place the application's name in a notification or
-| any other location as required by the application or its packages.
-*/
-// before('deploy:prepare', 'test'); // 检查deploy_path|releases|shared|.dep是否存在,并创建它
-// before('deploy:lock', 'test'); // 创建.dep/deploy.lock文件,防止多个部署任务运行
-// before('deploy:release', 'test'); // 在release_name下创建release文件夹
-// before('deploy:update_code', 'test'); // 从git仓库中下载代码
-// before('deploy:shared', 'test'); // 从shared目录创建共享的文件和目录然后link到releases中
-// before('deploy:writable', 'test'); // 设置writable_dirs中指定的目录可选权限
-before('deploy:vendors', 'fix:env'); // 安装composer 依赖项
-// before('deploy:clear_paths', 'test'); // 删除clear_paths中指定的目录
-// before('deploy:symlink', 'test'); // 切换current连接到release
-// before('deploy:unlock', 'test'); // 部署解锁,删除.dep/deploy.lock文件
-// before('cleanup', 'test'); // 清除keep_releases中指定的过期项目
-// before('success', 'test'); // 打印部署成功的信息
+task('make_cache', function() {
+	within('{{release_path}}', function () {
+		// run("php artisan route:cache");
+		run("php artisan config:cache");
+	});
+});
 
-// after('deploy:prepare', 'test');
-// after('deploy:lock', 'test');
-// after('deploy:release', 'test');
-// after('deploy:update_code', 'test');
-// after('deploy:shared', 'test');
-// after('deploy:writable', 'test');
-// after('deploy:vendors', 'test');
-// after('deploy:clear_paths', 'test');
-// after('deploy:symlink', 'test');
-// after('deploy:unlock', 'test');
-// after('cleanup', 'test');
-after('success', 'after:success');
-after('deploy:failed', 'after:failed');
+// 执行自定义任务，注意时间点是 current 已经成功链向新部署的目录之后
+after('deploy:symlink', 'clear_cache');
+after('deploy:symlink', 'set_env');
+after('deploy:symlink', 'make_cache');
+after('deploy:symlink', 'restart_phpfpm');
+after('deploy:symlink', 'reload_supervisor');
+after('deploy:symlink', 'reset_opcache');
+
+after('deploy:failed', 'deploy:unlock');
+after('success', 'send_message');
+
+// Migrate database before symlink new release.
+// 执行数据库迁移，建议删掉，迁移虽好，但毕竟高风险，只推荐用于开发环境
+// before('deploy:symlink', 'artisan:migrate');
+
+```
