@@ -152,6 +152,9 @@ stdout_logfile=/home/vagrant/code/queue.log
 ```
 
 启动supervisor
+> supervisord -c /etc/supervisord.conf  
+> supervisorctl -c /etc/supervisord.conf
+> supervisorctl restart all
 
 step_1.读取可用的组
 > supervisorctl reread  
@@ -160,4 +163,5 @@ step_2.更新
 > supervisorctl update  
 
 step_3.启动指定的worker
-> supervisorctl start  laravel-worker:* 
+> supervisorctl start laravel-worker:* 
+> supervisorctl restart all
