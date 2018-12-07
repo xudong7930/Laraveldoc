@@ -155,3 +155,56 @@ app/Http/Kernel.php
 7.使用HHVM和OPcache和PHP7.0
 8.env文件中文件缓存,session缓存,队列缓存都使用redis
 
+# orWhere查询
+```php
+DB::table("users")->where(function($query) use ($date) {
+    $query->where("field_1", 1)
+        ->orWhere([
+            ["field_2", '=', 2]
+        ])
+});
+```
+
+
+# 404页面
+app\Exceptions\Handler.php中的render方法
+```php
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+public function render($request, Exception $exception)
+{
+    if ($exception instanceof MethodNotAllowedHttpException || $exception instanceof NotFoundHttpException) {
+        return redirect()->route('404');
+    }
+
+    if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+        notifyMessage('error', "抱歉,你的token已经过期");
+        return redirect()->route('logout');
+    }
+
+    return parent::render($request, $exception);
+}
+```
+
+
+# 分页带查询条件
+```
+{{ $baseSalaries->appends($query)->links() }}
+```
+
+# 获取客户端IP
+```
+request()->getClientIp();
+```
+
+#前端js使用blade模板的传递的json
+```js
+let jsonData = {!! json_encode($data) !!}
+```
+
+#运行原生sql
+```php
+$sql="";
+DB::connection('default')->getPdo()->exec($sql);
+```
