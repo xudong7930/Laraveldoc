@@ -1,0 +1,150 @@
+{
+	"laravel csrf field": {
+	    "prefix": "csrf.field",
+	    "body": [
+	        "{{ csrf_field() }}"
+	    ],
+	    "description": "laravel csrf field"
+	},
+
+	"laravel csrf meta": {
+	    "prefix": "csrf.meta",
+	    "body": [
+	        "<meta name=\"csrf-token\" content=\"{{ csrf_token() }}\">"
+	    ],
+	    "description": "laravel csrf meta"
+	},
+
+	"blade模板组件": {
+	    "prefix": "bl.component",
+	    "body": [
+	        "@component(\"${1:className}\")",
+	        "${2}",
+	        "@endcomponent"
+	    ],
+	    "description": "blade模板组件"
+	},
+
+	"blade模板组件": {
+	    "prefix": "bl.slot",
+	    "body": [
+	        "@slot(\"${1:className}\")",
+	        "${2}",
+	        "@endslot"
+	    ],
+	    "description": "blade模板组件"
+	},
+
+	"blade模板原生PHP": {
+	    "prefix": "bl.php",
+	    "body": [
+	        "@php",
+	        "${1}",
+	        "@endphp"
+	    ],
+	    "description": "blade模板原生PHP"
+	},
+
+	"blade模板循环": {
+	    "prefix": "bl.foreach",
+	    "body": [
+	        "@foreach (${1:\$items} as \$item)",
+	        "  ${2}",
+	        "@empty",
+	        "  nodata",
+	        "@endforeach"
+	    ],
+	    "description": "blade模板循环"
+	},
+
+	"blade模板占位": {
+	    "prefix": "bl.yield",
+	    "body": [
+	        "@yield('${1:content}')"
+	    ],
+	    "description": "blade模板占位"
+	},
+	"Blade模板each": {
+		"prefix": "bl.each",
+		"body": [
+			"@each('view.name', $jobs, 'job', 'view.empty')"
+		],
+		"description": "Blade模板each"
+	},
+
+	"Blade模板include": {
+		"prefix": "bl.include",
+		"body": [
+			"@include(\"${1}\", [${2}])"
+		],
+		"description": "Blade模板include"
+	},
+
+
+	"Blade模板js": {
+		"prefix": "bl.js",
+		"body": [
+			"<script src=\"{{ asset('${1}') }}\"></script>"
+		],
+		"description": "Blade模板js"
+	},
+
+	"Blade模板样式": {
+		"prefix": "bl.css",
+		"body": [
+			"<link rel=\"stylesheet\" href=\"{{ asset(\"${1}\") }}\">"
+		],
+		"description": "Blade模板样式"
+	},
+
+	"Blade模板路由变量": {
+		"prefix": "bl.route",
+		"body": [
+			"{{ route('${1}', [${2}]) }}"
+		],
+		"description": "Blade模板路由变量"
+	},
+
+
+	"Blade 变量不转义": {
+		"prefix": "bl.var",
+		"body": [
+			"{!! ${1} !!}"
+		],
+		"description": "Blade 变量不转义"
+	},
+
+	"blade modal injection": {
+		"prefix": "bl.inject",
+		"body": [
+			"@inject(\"${1:ModalAlias}\", \"App\")"
+		],
+		"description": "blade modal injection"
+	},
+	
+	"Blade 变量": {
+		"prefix": "bl.var",
+		"body": [
+			"{{ ${1} }}"
+		],
+		"description": "Blade 变量"
+	},
+	
+	"Blade模板继承": {
+		"prefix": "bl.ext",
+		"body": [
+			"@extends('${1:layouts.app}')"
+		],
+		"description": "Blade模板继承"
+	},
+
+	"blade section": {
+		"prefix": "bl.section",
+		"body": [
+			"@section('${1:content}')",
+			"${2}",
+			"@stop"
+		],
+		"description": "blade section"
+	}
+}

@@ -208,3 +208,15 @@ let jsonData = {!! json_encode($data) !!}
 $sql="";
 DB::connection('default')->getPdo()->exec($sql);
 ```
+
+#自定义验证规则
+编辑AppServiceProvider.php文件boot方法:
+```php
+Validator::extend('myrule', function($attribute, $value, $parameters, $validator) {
+    $s = array_get($validator->getData(), $parameters[0]);
+    return true;
+});
+
+参数传递:
+'email' => 'required|myrule:name'
+```

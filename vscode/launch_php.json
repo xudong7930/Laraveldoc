@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+        "name": "debug with file",
+        "type": "php",
+        "request": "launch",
+        "program": "file",
+        "cwd": "fileDirname",
+        "port": 9001
+    }, {
+        "name": "debug with vagrant",
+        "type": "php",
+        "request": "launch",
+        "pathMappings": {
+            "/home/vagrant/code/ding_liufei": "/Users/xudong7930/code/ding_liufei"
+        },
+        "port": 9000
+    }, {
+        "name": "debug with buildin server",
+        "type": "php",
+        "request": "launch",
+        "port": 9001
+    }]
+}

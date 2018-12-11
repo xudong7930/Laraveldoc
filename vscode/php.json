@@ -1,0 +1,397 @@
+{
+
+
+    "Laravel迁移创建表": {
+        "prefix": "table.create",
+        "body": [
+            "Schema::create('${1:users}', function(Blueprint \\$table) {",
+            "    \\$table->increments('id');",
+            "    ${2}",
+            "    \\$table->timestamps();",
+            "});"
+        ],
+        "description": "Laravel迁移创建表"
+    },
+
+
+    "Laravel路由delete": {
+        "prefix": "route.delete",
+        "body": [
+            "Route::delete('${1}', 'HomeController@destroy')->name(\"${2}\");"
+        ],
+        "description": "Laravel路由delete"
+    },
+
+    "Laravel路由put": {
+        "prefix": "route.put",
+        "body": [
+            "Route::put('${1}', 'HomeController@update')->name(\"${2}\");"
+        ],
+        "description": "Laravel路由put"
+    },
+
+    "Laravel路由post": {
+        "prefix": "route.post",
+        "body": [
+            "Route::post('${1}', 'HomeController@${1:store}')->name(\"${2}\");"
+        ],
+        "description": "Laravel路由post"
+    },
+
+    "Laravel路由get": {
+        "prefix": "route.get",
+        "body": [
+            "Route::get('${1}', 'HomeController@${1}')->name(\"${2}\");"
+        ],
+        "description": "Laravel路由get"
+    },
+
+
+    "控制器更新": {
+        "prefix": "met.update",
+        "body": [
+            "/**",
+            " * 保存更新",
+            " * @param Request $request",
+            " * @param integer $id 表ID",
+            " * @return void",
+            " */",
+            "public function update(Request $request, $id)",
+            "{",
+            "    ${2}",
+            "}"
+        ],
+        "description": "控制器更新"
+    },
+    
+    "控制器编辑": {
+        "prefix": "met.store",
+        "body": [
+            "/**",
+            " * 编辑",
+            " * ",
+            " * @param integer $id",
+            " * @return void",
+            " */",
+            "public function edit($id)",
+            "{",
+            "    ${2}",
+            "}"
+        ],
+        "description": "控制器编辑"
+    },
+
+    "控制器存储": {
+        "prefix": "met.store",
+        "body": [
+            "/**",
+            " * 创建",
+            " * ",
+            " * @param Request $request",
+            " * @return void",
+            " */",
+            "public function store(Request $request)",
+            "{",
+            "    ${2}",
+            "}"
+        ],
+        "description": "控制器存储"
+    },
+
+    "控制器创建方法": {
+        "prefix": "met.create",
+        "body": [
+            "/**",
+            " * 创建",
+            " */",
+            "public function create()",
+            "{",
+            "    return view(\"${1}\");",
+            "}"
+        ],
+        "description": "控制器创建视图"
+    },
+    "控制器删除方法": {
+        "prefix": "met.del",
+        "body": [
+            "/**",
+            " * 删除",
+            " * @param integer $id 表ID",
+            " * @return void",
+            " */",
+            "public function destroy($id)",
+            "{",
+            "    ${2}",
+            "}"
+        ],
+        "description": "function destroy"
+    },
+
+
+    
+    "模型字段自动处理": {
+        "prefix": "el.get",
+        "body": [
+            "/**",
+            " * 字段获取时的处理",
+            " * ",
+            " * @param string $value ",
+            " * @return array",
+            " */",
+            "public function get${1}Attribute($value)",
+            "{",
+            "    return json_decode($value, true);",
+            "}"
+        ],
+        "description": "模型字段自动处理"
+    },
+
+    "模型字段自动处理": {
+        "prefix": "el.set",
+        "body": [
+            "/**",
+            " * 字段保存时的处理",
+            " * ",
+            " * @param string $value",
+            " * @return void",
+            " */",
+            "public function set${1}Attribute($value)",
+            "{",
+            "    $this->attributes['${1}'] = $value;",
+            "}"
+        ],
+        "description": "模型字段自动处理"
+    },
+    "模型多对多的多态关联反转": {
+        "prefix": "el.polym2many.inverse",
+        "body": [
+            "// 多对多的多态表: Post和Video共同使用Tags, 通过中间表tabables的tagable_id, tagable_type区分",
+            "public function ${1:posts}()",
+            "{",
+            "    return \\$this->morphedByMany(Post::class, 'tagable');",
+            "}"
+        ],
+        "description": "模型多对多的多态关联反转"
+    },
+    
+    "模型多对多的多态关联": {
+        "prefix": "el.polym2many",
+        "body": [
+            "// 多对多多态关联: ${3}一篇文章有个评论",
+            "public function ${1:tags}()",
+            "{",
+            "    // return $this->morphToMany(Tag::class, '中间表关联字段(prefix_id,prefix_type)前缀: tagable');",
+            "    return \\$this->morphToMany(Tag::class, 'tagable');${2}",
+            "}"
+        ],
+        "description": "模型多对多的多态关联"
+    },
+
+
+    "模型多态关联": {
+        "prefix": "el.polym",
+        "body": [
+            "// 多态关联: ${3}一篇文章有个评论",
+            "public function ${1:comments}()",
+            "{",
+            "    // return $this->morphMany(Comment::class, '关联字段(prefix_id,prefix_type)前缀: comment');",
+            "    return \\$this->morphMany(Comment::class, 'comment');${2}",
+            "}"
+        ],
+        "description": "模型多态关联"
+    },
+
+    "模型多态关联反转": {
+        "prefix": "el.polym.inverse",
+        "body": [
+            "// 多态表: Post和Video共同使用Comment, 通过comment_id, comment_type区分",
+            "public function ${1:commentable}()",
+            "{",
+            "    return \\$this->morphTo();",
+            "}"
+        ],
+        "description": "模型多态关联反转"
+    },
+
+    "模型远程一对多关系": {
+        "prefix": "el.hasthrough",
+        "body": [
+            "// manythrough: ${3}一个国家的人的文章",
+            "public function ${1:posts}()",
+            "{",
+            "    // countries <- users -> posts",
+            "    // return $this->hasManyThrough(远程表:Post::class, 中间关联表:User::class, '本表ID在中间表的外键:country_id', '中间表在远程表的外键: user_id');",
+            "    // select `posts`.*, `users`.`country_id` from `posts` inner join `users` on `users`.`id` = `posts`.`user_id` where `users`.`country_id` = ?",
+            "    return \\$this->hasManyThrough(Post::class, User::class, 'country_id', 'user_id');${2}",
+            "}"
+        ],
+        "description": "模型远程一对多关系"
+    },
+    
+    "模型多对多关系": {
+        "prefix": "el.many2many",
+        "body": [
+            "// many2many: ${4}一个用户可以有多个角色",
+            "public function ${1:roles}()",
+            "{",
+            "    // return $this->belongsToMany(外表:Role::class, '中间表: user_role', '本表在中间表的字段: user_id', '外表在中间表的字段: role_id');",
+            "    return \\$this->belongsToMany(${2:Role}::class, 'user_role', 'user_id', 'role_id');${3}",
+            "}"
+        ],
+        "description": "模型多对多关系"
+    },
+    
+    "模型一对多关系反转": {
+        "prefix": "el.one2many.inverse",
+        "body": [
+            "// 1对多关系反转: ${4}一个xx属于一个xx",
+            "public function ${1:user}()",
+            "{",
+            "    // return \\$this->belongsTo(User::class, 'users表在本表的外键:user_id', 'users表的主键或其他字段');",
+            "    return \\$this->belongsTo(${2:User}::class, 'user_id', 'id');${3}",
+            "}"
+        ],
+        "description": "模型一对多关系反转"
+    },
+    "模型一对多关系": {
+        "prefix": "el.one2many",
+        "body": [
+            "// one2many: ${4}一个用户可以有多个手机",
+            "public function ${1:mobiles}()",
+            "{",
+            "    return \\$this->hasMany(${2: Mobile}::class, 'user_id', 'id');${3}",
+            "}"
+        ],
+        "description": "模型一对多关系"
+    },
+
+    "模型一对一关系": {
+        "prefix": "el.one2one",
+        "body": [
+            "// 1对1: ${4}一个用户有一个手机",
+            "public function ${1:mobile}()",
+            "{",
+            "    //return $this->hasOne(Mobile::class, '本表在mobile表的外键:user_id', '本表users的主键: id');",
+            "    return \\$this->hasOne(${2:Mobile}::class, 'user_id', 'id');${3}",
+            "}"
+        ],
+        "description": "模型一对一关系"
+    },
+    
+    "模型一对一关系反转": {
+        "prefix": "el.one2one.inverse",
+        "body": [
+            "// 1对1关系反转: ${4}一个xx属于一个xx",
+            "public function ${1:user}()",
+            "{",
+            "    // return \\$this->belongsTo(User::class, 'users表在本表的外键:user_id', 'users表的主键或其他字段');",
+            "    return \\$this->belongsTo(${2:User}::class, 'user_id', 'id');${3}",
+            "}"
+        ],
+        "description": "模型一对一关系反转"
+    },
+
+    "php var_dump": {
+        "prefix": "dump",
+        "body": [
+            "var_dump(${1});die;"
+        ],
+        "description": "php var_dump"
+    },
+    "php class namespace": {
+        "prefix": "np",
+        "body": [
+            "namespace App${1};"
+        ],
+        "description": "php class namespace"
+    },
+    "laravel controller delete method": {
+        "prefix": "met.destroy",
+        "body": [
+            "public function destroy(\\$id)",
+            "{",
+            "\t\\$item = ${1:Model}::find(\\$id);",
+            "\t\\$item->delete();",
+            "\treturn redirect()->route(\"\");",
+            "}"
+        ],
+        "description": "Laravel controller delete method"
+    },
+    "对数组中的值进行累计操作": {
+        "prefix": "arr.reduce",
+        "body": [
+            "\\$result = array_reduce(${1:\"要遍历的数组\"}, function(\\$lastValue, \\$currentValue) {",
+            "   ${3}",
+            "}, ${2:\"初始值\"});"
+        ],
+        "description": "对数组中的值进行累计操作"
+    },
+    "php array item": {
+        "prefix": "ai",
+        "body": [
+            "\"${1}\" => ${2}"
+        ],
+        "description": "PHP数组元素"
+    },
+    "Eloquent not fillable fields": {
+        "prefix": "el.guard",
+        "body": [
+            "protected \\$guarded = [${1}];"
+        ],
+        "description": "Eloquent not fillable fields"
+    },
+    "eloquent table": {
+        "prefix": "el.table",
+        "body": [
+            "protected \\$table = \"${1}\";"
+        ],
+        "description": "Eloquent表名称指定"
+    },
+    "make a test route": {
+        "prefix": "route.test",
+        "body": [
+            "Route::get('/s', function(Request \\$request){",
+            "    ${1}",
+            "});",
+            " "
+        ],
+        "description": "创建一个测试路由"
+    },
+    "Response download": {
+        "prefix": "res_download",
+        "body": [
+            "return response()->download('${1:path_to_file}', '${2:filename}', [${3:header}]);"
+        ],
+        "description": "Laravel Response Download File"
+    },
+    "php class public funciton": {
+        "prefix": "met",
+        "body": [
+            "public function ${1:some}(${2})",
+            "{",
+            "\t${3}",
+            "}"
+        ],
+        "description": "php class public funciton"
+    },
+    "php class protected func": {
+        "prefix": "metp",
+        "body": [
+            "protected function ${1:some}(${2})",
+            "{",
+            "\t${3}",
+            "}"
+        ],
+        "description": "php class protected func"
+    },
+    "php class static func": {
+        "prefix": "mets",
+        "body": [
+            "public static function ${1:some}(${2})",
+            "{",
+            "\t${3}",
+            "}"
+        ],
+        "description": "php class static func"
+    }
+}
