@@ -47,3 +47,18 @@ sudo service redis restart
 
 重启虚拟机: vagrant reload --provision
 
+# laravel项目在vagrant中的权限问题:
+查看nginx和php的运行用户:
+    ps -aux | grep nginx
+    ps -aux | grep php
+
+编辑/etc/nginx/nginx.conf: 1行
+编辑/etc/php/7.1/fpm/pool.d/www.conf: 23,24,48,49行
+编辑/usr/lib/tmpfiles.d/php7.1-fpm.conf: 1行
+
+# vagrant用户的密码
+用户: vagrant
+密码: vagrant
+
+# homestead的mysql
+配置文件/etc/mysql/mysql.conf.d/mysqld.cnf
