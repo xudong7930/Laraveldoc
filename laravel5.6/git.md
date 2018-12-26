@@ -1,5 +1,19 @@
+# git远程分支与本地分支合并
 
+<!-- 1.查看远程仓库 -->
+git remote -v 
 
+<!-- 2.将远程master分支拉到本地,并重命名为temp-->
+git fetch origin master:temp
+
+<!-- 3.比较本地分支和temp分支 -->
+git diff temp
+
+<!-- 4.将temp分支与本地分支合并 -->
+git merge temp
+
+<!-- 5.删除temp分组 -->
+git brand -d temp
 
 # git放弃本地修改
 1.未使用git add缓存代码：
