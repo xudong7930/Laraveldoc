@@ -75,57 +75,43 @@ return [
 
 
 #laravel的xdebug调试
-1.PHP内置浏览器调试:
-xdebug的配置:
+php.ini的配置
 ```
 [xdebug]
-zend_extension = /usr/local/lib/php/pecl/20170718/xdebug.so
-xdebug.remote_enable=1
+zend_extension=xdebug.so
+xdebug.remote_enable = 1
 xdebug.remote_autostart=1
-xdebug.remote_handler=dbgp
-xdebug.remote_mode=req
+xdebug.remote_connect_back = 1
+xdebug.remote_port = 9090
 xdebug.remote_host=127.0.0.1
-xdebug.remote_port=9001
 xdebug.idekey=VSCODE
 ```
 
-vscode的launch.json配置
-```json
-{"version":"0.2.0","configurations":[{"name":"debug with file","type":"php","request":"launch","program":"${file}","cwd":"${fileDirname}","port":9001},{"name":"debug with vagrant","type":"php","request":"launch","pathMappings":{"/home/vagrant/code/ding_liufei":"/Users/xudong7930/code/ding_liufei"},"port":9000},{"name":"debug with buildin server","type":"php","request":"launch","port":9001}]}
-```
-
-中间件EncryptCookies.php中:
-```php
-protected $except = [
-    'XCODE_SESSION'
-];
-```
-
-2.homestead远程调试
-homestead服务器上的xdebug.ini:
-```
-zend_extension=xdebug.so
-xdebug.idekey="VSCODE"
-xdebug.remote_autostart=1
-xdebug.remote_enable = 1
-xdebug.remote_connect_back = 1
-xdebug.remote_port = 9000
-xdebug.remote_host=10.0.2.15
-xdebug.max_nesting_level = 512
-```
-
-vscode的launch.json配置:
+vscode中launch.json的配置
 ```
 {
-    "name": "xdebug for vagrant",
-    "type": "php",
-    "request": "launch",
-    "pathMappings": {
-        "/home/vagrant/code/ding_liufei": "/Users/xudong7930/code/ding_liufei"
-    },  
-    "port": 9000
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug with nginx or php-server",
+            "type": "php",
+            "request": "launch",
+            "port": 9090
+        },
+
+        {
+            "name": "debug with homestead",
+            "type": "php",
+            "request": "launch",
+            "pathMappings": {
+                "/Users/xudong7930/code/new-fms/fms-server": "/Users/xudong7930/code/new-fms/fms-server"
+            },
+            "port": 9090
+        }
+    ]
 }
 ```
+
 
 # laravel中.env文件注释
 ```ini
