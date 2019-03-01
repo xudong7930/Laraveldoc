@@ -2,6 +2,67 @@ Laravel Request&Response
 ========================
 
 # Request
+```
+// 请求方法
+$request->method(); //GET,POST
+
+// 判断请求方法
+if ($request->isMethod('post')) {
+    return 333;
+}
+
+// 请求路径
+$request->path();
+
+// 完整的url
+$request->url(); 
+
+// 请求IP
+$request->ip();
+
+// 请求端口
+$request->getPort();
+
+// 请求参数
+$request->pageSize;
+$requst->get('pageSize', 10); //symfony方法
+$requst->input('pageSize', 10);
+
+// 检测请求参数
+if ($request->has('some')) {
+    echo "has field some";
+}
+
+// 所有参数
+$request->all();
+
+// 取得部分参数
+$request->only(['pageSize']);
+
+// 剔除不需要的参数
+$request->except(['pageSize']);
+
+// 所有请求头
+$request->headers
+
+// 指定请求头
+$request->header( 'Host' );
+
+// 检测是否有文件上传
+if ($request->hasFile('avatar') && $request->file('avatar')->isValid()) {
+    $s = $request->file('avatar')->move('avatar'); // 移动到public/avatar/目录下
+}
+
+// 提取上传文件
+$request->file('avatar');
+
+// 提交所有cookie
+$request->cookie();
+
+// 路径判断
+$request->is("api/v1/*");
+```
+
 
 # Response
 // basic
