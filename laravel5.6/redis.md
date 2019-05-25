@@ -13,12 +13,12 @@ wget http://download.redis.io/releases/redis-3.2.1.tar.gz
 tar -zxf reids-3.2.1.tar.gz
 cd redis-3.2.1
 make && make PREFIX=/usr/local/redis install
-
 cp redis.conf /usr/local/redis/
 
 vim /usr/local/redis/redis.conf 修改:
     timeout 300
     daemonize yes
+   logfile ''
 
 #启动
 cd /usr/local/redis
@@ -89,7 +89,6 @@ Redis 字符串:
     指定键0.3: incrbyfloat lnmp 0.3
     追加: append 键名 值
 
-
 Redis 哈希:
    设置哈希: hmset lnmp web "nginx" db "mysql" os "linux" parse "php"
    获取指定键值: hgetall lnmp
@@ -112,7 +111,6 @@ Redis 列表:
    最右边的元素: rpop member
 
 
-
 Redis 集合:
 
    向集合中添加元素: sadd db "redis" "mysql" ...
@@ -129,8 +127,6 @@ Redis 集合:
    随机返回2个元素: srandmember dbs 2
    删除集合中一个或多个元素: srem dbs 值1 值2
    合并多个集合: sunion dbs1 dbs2
-
-
 
 Redis 有序集合:
 
@@ -176,7 +172,6 @@ Redis事务:
    exec //执行
 
 
-
 Redis备份和恢复:
    将数据保存到硬盘: save
    后台将数据保存到硬盘: bgsave
@@ -203,4 +198,85 @@ Redis管道技术:
 
 
 Redis分区:
+```
+
+
+
+# redis in laravel
+安装:
+> composer require predis/predis
+
+配置:
+> config/database.php
+
+基本命令:
+```php
+#指定连接
+Redis::connection('product.server')->set('username', 'sbjsw');
+Redis::get('username');
+
+Redis::command('redis shell命令');
+
+#字符串
+$result = Redis::command('set', ['jwt', '15811448243']);
+$result = Redis::command('get', ['jwt']);
+$result = Redis::command('set', ['user_1012_count', 1]);
+$result = Redis::command('incr', ['user_1012_count']);
+$result = Redis::command('incrby', ['user_1012_count', 2]);
+
+#哈希
+$result = Redis::command('hmset', ['centos', 'n', 'nginx']);
+$result = Redis::command('hmget', ['lnmp', 'n', 'm']);
+
+#列表
+$result = Redis::command('lpush', ['users', 'hudong', 'xuergou', 'zhaocongcong']);
+$result = Redis::command('lrange', ['users', 0, 1]);
+$result = Redis::command('lpop', ['users']);
+
+#集合
+$result = Redis::command('sadd', ['db', 'redis', 'memcache', 'cacti']);
+$result = Redis::command('sadd', ['db', 'mongodb']);
+$result = Redis::command('smembers', ['db']); //获取集合
+
+#有序集合
+$result = Redis::command('zadd', ['zqdl', 1, 'xd', 2, 'lzw', 3, 'zxs']);
+
+#订阅和发布
+$result = Redis::command('subscribe', ['q1', 'q2']);
+$result = Redis::command('unsubscribe', ['q1', 'q2']);
+$result = Redis::command('publish', ['q1', json_encode(['stauts'=>'ok'])]);
+
+```
+
+管道线pipline:
+```php
+#一次操作执行多个redis命令
+$data = [];
+Redis::pipeline(function($pipe) use ($data){
+   foreach($data as $i=>$item){
+      $pipe->set("key:$i", json_encode($item));
+   }
+});
+```
+
+
+订阅(sub)和发布(pub):
+subscribe:
+```php
+#创建command文件
+php artisan make:command RedisSubscribe
+
+#在RedisSubscribe.php文件中handle方法:
+Redis::subscribe(['test-channel'], function($message){
+   echo $message;
+});
+
+Redis::psubscribe(['channel.*'], function($message, $channel){
+   $this->info($channel.":".$message);
+});
+```
+
+publish:
+```php
+Redis::publish('channel.nadounainai', json_encode(['foo'=>'bar']));
 ```
