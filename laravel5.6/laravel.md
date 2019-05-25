@@ -62,7 +62,7 @@ unset($query['page']);
 $items->appends($query)->links();
 ```
 
-# 自定义常量
+# 自定义常量constants.php
 touch app/config/consts.php 内容:
 ```php
 <?php
@@ -114,9 +114,44 @@ vscode中launch.json的配置
 
 
 # laravel中.env文件注释
-```ini
+```
 # 某个应用的ID
 APP_ID=123123
+CLUSTER[NODE1]="192.168.1.1:2203"
+
+
+if (!function_exists('env_array')) {
+    /**
+     * Gets the values of an environment array.
+     *
+     * @param string $name
+     * @param bool $flatten
+     * @param array $default
+     * @return array
+     */
+    function env_array(string $name, bool $flatten = true, array $default = []): array
+    {
+        $data = [];
+        foreach ($_ENV as $key => $value) {
+            $matches = [];
+            if (preg_match('/^' . $name . '\[([a-zA-Z0-9]*)\]$/', $key, $matches)) {
+                if (isset($matches[1])) {
+                    $data[$matches[1]] = $value;
+                }
+            }
+        }
+
+        if (empty($data)) {
+            $data = $default;
+        }
+
+        if ($flatten) {
+            return array_values($data);
+        }
+
+        return $data;
+    }
+}
 ```
 
 # Laravel性能优化

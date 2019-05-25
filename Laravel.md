@@ -1,6 +1,23 @@
 Laravel
 =======
 
+# 12.request获取参数:
+```
+$request->get('pageSize', 10);
+```
+
+# 11.model如果存在则更新，否则创建: updateOrCreate
+```
+$user = User::updateOrCreate(['email'=>'sbjsw@qq.com'], ['id'=>1,'email'=>'sbjsw@qq.com']);
+```
+
+
+# 10.laralvel数据库的严格模式:
+config/database.php中:
+```php
+"strick" => true //改为false
+```
+
 ## 9. Laraevl5.4使用whoops错误输出
 step1: 安装whoops包
 * composer require filp/whoops
@@ -50,7 +67,7 @@ setp2: 在composer.json里面添加
         "App\\": "app/"
     },
     "files": [
-        "app/helpers.php"
+        "app/helpers.php",
     ]
 },
 ```

@@ -165,3 +165,27 @@ step_2.更新
 step_3.启动指定的worker
 > supervisorctl start laravel-worker:* 
 > supervisorctl restart all
+
+
+开机启动supervisor
+vim /usr/lib/systemd/system/supervisord.service
+
+```bash
+[Unit]
+Description=Process Monitoring and Control Daemon
+After=rc-local.service nss-user-lookup.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf
+ExecStop=/usr/bin/supervisord shutdown
+ExecReload=/usr/bin/supervisord reload
+KillMode=process
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
+```
+
+systemctl enable supervisord.service
