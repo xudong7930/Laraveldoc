@@ -28,3 +28,15 @@ return $error = [
 	'error_code' => 40001,
 	'error_msg' => '错误的错误的'
 ];
+
+
+/*
+Api结构:
+	app/Http/Apis/
+	app/Http/Apis/v1
+	app/Http/Apis/ApiController.php
+
+编辑RouteServiceProvider.php中:
+	19行: protected $apiNamespace = 'App\Http\Apis';
+	72行: ->namespace($this->apiNamespace)
+*/

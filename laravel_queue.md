@@ -138,7 +138,7 @@ centos:
 ubuntu:
 > apt-get -y install supervisor
 
-vim /etc/supervsor/conf.d/laravel.conf 添加:
+vim /etc/supervisor/conf.d/laravel.conf 添加:
 ```bash
 [program:laravel-worker]
 process_name=%(program_name)s_%(process_num)02d
