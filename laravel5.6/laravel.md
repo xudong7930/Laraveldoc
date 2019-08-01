@@ -241,3 +241,11 @@ Validator::extend('myrule', function($attribute, $value, $parameters, $validator
 参数传递:
 'email' => 'required|myrule:name'
 ```
+
+
+
+# logs目录，cache目录没有权限
+```bash
+sudo chmod -Rf 0777 bootstrap/cache
+sudo chmod -Rf 0777 storage/logs
+```
