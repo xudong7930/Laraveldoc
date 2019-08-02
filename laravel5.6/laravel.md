@@ -249,3 +249,14 @@ Validator::extend('myrule', function($attribute, $value, $parameters, $validator
 sudo chmod -Rf 0777 bootstrap/cache
 sudo chmod -Rf 0777 storage/logs
 ```
+
+在config/logging.php中:
+```php
+    'daily' => [
+        'driver' => 'daily',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => 'debug',
+        'days' => 7,
+        'permission' => 0664,
+    ],
+```
