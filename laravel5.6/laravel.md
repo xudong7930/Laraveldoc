@@ -260,3 +260,10 @@ sudo chmod -Rf 0777 storage/logs
         'permission' => 0664,
     ],
 ```
+
+
+# laravel生产环境
+APP_ENV = production
+APP_DEBUG = false
+
+php artisan route:cache && php artisan config:cache && composer dump-autoload --optimize && php artisan optimize

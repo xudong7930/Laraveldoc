@@ -42,6 +42,21 @@ $env = $app->detectEnvironment(function(){
     }
 });
 
+
+// 新版
+$env = $app->detectEnvironment(function(){
+    $environmentPath = __DIR__.'/../.env';
+    $setEnv = trim(file_get_contents($environmentPath));
+    if (file_exists($environmentPath))
+    {
+        putenv("APP_ENV=$setEnv");
+        if (getenv('APP_ENV') && file_exists(__DIR__.'/../.' .getenv('APP_ENV') .'.env')) {
+            $dotenv = Dotenv::create(__DIR__ . '/../', '.' . getenv('APP_ENV' . '.env') );
+            $dotenv->overload();
+        } 
+    }
+});
+
 ```
 
 ## step5: 在bootstrap/app.php中加载刚才创建的环境文件
