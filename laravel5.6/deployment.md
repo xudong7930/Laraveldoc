@@ -6,9 +6,9 @@ laravel deployment
 ```conf
 
 server {
-    listen 80;
-    server_name example.com;
-    root /example.com/public;
+    listen 8000;
+    server_name ehd4.f3322.net;
+    root /root/html/blog/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";
